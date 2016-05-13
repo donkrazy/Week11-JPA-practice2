@@ -10,8 +10,6 @@
 		</encoder>
 	</appender>
 
-	<!-- com.bit2015.logexample3 아래 패키지 로그들만 C:\LogExample\logexample3.log 파일에 
-		출력하는 로거 -->
 	<logger name="com.estsoft.mysite" level="WARN" additivity="false">
 		<appender-ref ref="consoleAppender" />
 	</logger>
@@ -20,7 +18,6 @@
 	<!-- <root level="DEBUG"> <appender-ref ref="consoleAppender" /> </root> -->
 	<root level="WARN">
 		<appender-ref ref="consoleAppender" />
-		<appender-ref ref="fileAppender" />
 	</root>
 	<!-- <root level="WARN"> <appender-ref ref="consoleAppender" /> </root> -->
 	<!-- <root level="ERROR"> <appender-ref ref="consoleAppender" /> </root> -->
