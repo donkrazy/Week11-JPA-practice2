@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<select id="selectByNo" resultType="boardvo" parameterType="long">
+		<![CDATA[
+		SELECT  no, title, content, group_no as groupNo, order_no as orderNo, depth, user_no as userNo
+				FROM  board
+				WHERE no = #{dododo}
+		]]>	
+	</select>
+	
+	<update id="updateHits" parameterType="long">
+		<![CDATA[
+			UPDATE board SET hits = hits + 1 WHERE no = #{ddonddon}
+		]]>
+	</update>
+	
+	
+	<update id="updateGroupOrder" parameterType="boardvo">
+		<![CDATA[
+			UPDATE board SET order_no = order_no + 1
+						 WHERE group_no = #{groupNo} AND order_no >= #{orderNo}
+		]]>
+	</update>
+	
+	<select id="getTotalCount" parameterType="String" resultType="long">
+		<choose>
+			<when test="null != #{value} and '' != #{value}">
+				<![CDATA[ 
+			 		SELECT count(*) FROM  board a, user b WHERE a.user_no = b.no
+					AND ( title LIKE '%${value}%' OR title LIKE '%${value}%' )
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+					SELECT count(*) FROM  board a, user b WHERE a.user_no = b.no 
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getList" parameterType="string" resultType="map">
+		<choose>
+			<when test="null != #{value} and '' != #{value} ">
+				<![CDATA[ 
+			 			     SELECT  a.no, a.title, b.name as userName, b.no, a.hits, DATE_FORMAT(reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate, depth
+						       FROM  board a, user b
+						      WHERE a.user_no = b.no AND (a.title LIKE '%${keyword}%' OR a.content LIKE '%${keyword}%')
+						   ORDER BY  group_no DESC, order_no ASC
+						      LIMIT  #{page}, #{listSize};
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+					     SELECT  a.no, a.title, b.name as userName, b.no, a.hits, DATE_FORMAT(reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate, depth
+						      FROM  board a, user b
+						     WHERE a.user_no = b.no
+						  ORDER BY  group_no DESC, order_no ASC
+						     LIMIT  #{page}, #{listSize};
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="groupNo==null">
+				<![CDATA[ 
+				INSERT INTO board VALUES( 
+					null, '${title}', now(), '${content}', #{userNo}, 
+					(select ifnull( max( group_no ), 0 ) + 1 from board as b), 1, 0, 0 
+				)
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+				INSERT INTO board VALUES(
+					null, #{title}, now(), #{content},  #{userNo}, #{groupNo}, #{orderNo}, #{depth}, 1
+				)	
+				]]>
+			</otherwise>
+		</choose>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>	
+	</insert>
+	
+	<delete id="delete" parameterType="boardvo">
+		DELETE FROM board WHERE no = #{no} AND user_no = #{userNo}
+		아직구현안함
+	</delete>
+	
+</mapper>
