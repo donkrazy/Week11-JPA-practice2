@@ -7,27 +7,27 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.estsoft.mysite.dao.GuestbookDao;
-import com.estsoft.mysite.vo.GuestbookVo;
+import com.estsoft.mysite.domain.Guestbook;
+import com.estsoft.mysite.repository.GuestbookRepository;
 
 @Service
 public class GuestbookService {
 	@Autowired
-	GuestbookDao guestbookDao;
+	GuestbookRepository guestbookRepository;
 
-	public List<GuestbookVo> getMessageList() {
-		return guestbookDao.getList();
+	public List<Guestbook> getMessageList() {
+		return guestbookRepository.getList();
 	}
 	
-	public boolean deleteMessage( GuestbookVo vo ) {
-		return guestbookDao.delete( vo ) == 1;
+	public boolean deleteMessage( Guestbook vo ) {
+		return guestbookRepository.delete( vo );
 	}
 	
-	public Object deleteMessage( GuestbookVo vo, boolean isAjax) {
-		int countDeleted = guestbookDao.delete( vo );
+	public Object deleteMessage( Guestbook vo, boolean isAjax) {
+		boolean isDeleted = guestbookRepository.delete( vo );
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", "success");
-		if(countDeleted == 1){
+		if(isDeleted){
 			map.put("data", vo.getNo() );
 		}
 		else{
@@ -36,14 +36,14 @@ public class GuestbookService {
 		return map; 
 	}
 	
-	public boolean insertMessage( GuestbookVo vo ) {
-		Long no = guestbookDao.insert(vo);
+	public boolean insertMessage( Guestbook vo ) {
+		Long no = guestbookRepository.insert(vo);
 		return no != 0;
 	}
 	
-	public Map<String, Object> insertMessage( GuestbookVo vo, boolean isAjax ) {
-		long no = guestbookDao.insert(vo);
-		vo = guestbookDao.get(no);
+	public Map<String, Object> insertMessage( Guestbook vo, boolean isAjax ) {
+		long no = guestbookRepository.insert(vo);
+		vo = guestbookRepository.get(no);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put( "result", "success" );
 		map.put( "data", vo );
@@ -51,7 +51,7 @@ public class GuestbookService {
 	}
 	
 	public Map<String, Object> getList(int page){
-		List<GuestbookVo> list = guestbookDao.getList(page);
+		List<Guestbook> list = guestbookRepository.getList(page);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put( "result", "success" );
 		map.put( "data", list );

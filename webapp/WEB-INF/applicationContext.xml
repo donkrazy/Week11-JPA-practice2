@@ -49,14 +49,14 @@
 			<value>com.mysql.jdbc.Driver</value>
 		</property>
 		<property name="url">
-			<value>yf2QODoLKefWgUEKRUynSeXMi4vuKk6Dq+iRipThlFDxB50MJnba9/CMdf8x4708xfensi5jaWLCX/nKfmOd4kEVYg84/mQ9qBCdA+vzNdQJwdjaddPHcw==
+			<value>1cdmC/Vyp5GUnC4/f6+/6W5uQQRyGTPbdapI9+ZkIOtJnjU0r2LpotmYNY9vfBnVzjnTY5J6UUBRhjHHrAYJ/b9nsFzNxpDT4XU/LScK11/RkTNPGpYYxiZEVYqTOk7/902Vukwwesq5E2QJUxF73g==
 			</value>
 		</property>
 		<property name="username">
-			<value>Hfs3i7cc6/SkgIH7E078WA==</value>
+			<value>Ow4xMFpjDuq/lkoWDTv7M5wzLimYfQpU</value>
 		</property>
 		<property name="password">
-			<value>VAFh8KnzV3yggY16lM/HXOiY7mn1TLWU</value>
+			<value>pzrtZXWhqiGI6ZXEyE9C+bCPkWQtrC9k</value>
 		</property>
 	</bean>
 	
@@ -86,7 +86,7 @@
 				<prop key="hibernate.format_sql">true</prop>                 							<!-- SQL 정렬해서 보기 -->
 				<prop key="hibernate.use_sql_comments">true</prop>                                 <!-- SQL 코멘트 보기 -->
 				<prop key="hibernate.id.new_generator_mappings">true</prop>                     <!-- 새 버전의 ID 생성 옵션 -->
-				<prop key="hibernate.hbm2ddl.auto">create</prop>                                   <!-- DDL 자동 생성 -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>                                   <!-- DDL 자동 생성 -->
 			</props>
 		</property>
 		

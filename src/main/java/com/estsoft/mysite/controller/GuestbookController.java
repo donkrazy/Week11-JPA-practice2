@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.estsoft.mysite.domain.Guestbook;
 import com.estsoft.mysite.service.GuestbookService;
-import com.estsoft.mysite.vo.GuestbookVo;
 
 @Controller
 @RequestMapping( "/guestbook" )
@@ -23,36 +23,29 @@ public class GuestbookController {
 	
 	@RequestMapping("")
 	public String index( Model model ) {
-		List<GuestbookVo> list = guestbookService.getMessageList();
+		List<Guestbook> list = guestbookService.getMessageList();
 		model.addAttribute( "list", list );
 		return "/guestbook/list";
 	}
 	
 
 	@RequestMapping( value="/add", method=RequestMethod.POST  )
-	public String add( @ModelAttribute GuestbookVo vo ) {
+	public String add( @ModelAttribute Guestbook vo ) {
 		guestbookService.insertMessage(vo);
 		return "redirect:/guestbook";
 	}
 	
 	@RequestMapping( value="/ajax-add", method=RequestMethod.POST  )
 	@ResponseBody
-	public Object ajaxAdd( @ModelAttribute GuestbookVo vo ) {
+	public Object ajaxAdd( @ModelAttribute Guestbook vo ) {
 		boolean isAjax = true;
 		Map<String, Object> map = guestbookService.insertMessage(vo, isAjax);
 		return map;
 	}
 	
-//	//SANDBOX: 그냥 string값 날려도 ajax에서 response로 받을 수 있따
-//	@RequestMapping( value="/ajax-delete", method=RequestMethod.POST  )
-//	@ResponseBody
-//	public String ajaxDelete( @ModelAttribute GuestbookVo vo ) {
-//		return "succeeee";
-//	}
-	
 	@RequestMapping( value="/ajax-delete", method=RequestMethod.POST  )
 	@ResponseBody
-	public Object ajaxDelete( @ModelAttribute GuestbookVo vo ) {
+	public Object ajaxDelete( @ModelAttribute Guestbook vo ) {
 		boolean isAjax = true;
 		return guestbookService.deleteMessage(vo, isAjax);
 	}
@@ -76,7 +69,7 @@ public class GuestbookController {
 	}
 	
 	@RequestMapping( value="/delete", method=RequestMethod.POST  )
-	public String delete( @ModelAttribute GuestbookVo vo ) {
+	public String delete( @ModelAttribute Guestbook vo ) {
 		guestbookService.deleteMessage(vo);
 		return "redirect:/guestbook";
 	}
