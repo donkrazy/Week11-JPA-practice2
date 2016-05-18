@@ -7,8 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.estsoft.mysite.domain.User;
 import com.estsoft.mysite.service.UserService;
-import com.estsoft.mysite.vo.UserVo;
 
 public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 	
@@ -20,10 +20,10 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		UserVo userVo = new UserVo();
-		userVo.setEmail(email);
-		userVo.setPassword(password);
-		UserVo authUser = userService.login(userVo);
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(password);
+		User authUser = userService.login(user);
 		String nextURL = request.getParameter("next");
 		if(authUser == null){
 			//System.out.println(request.getContextPath());   ?? 왜 잘돌아가는거지

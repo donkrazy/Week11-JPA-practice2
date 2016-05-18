@@ -123,8 +123,8 @@ $(function(){
 					
 					<fieldset>
 						<legend>성별</legend>
-						<label>여</label> <input type="radio" name="gender" value="F" checked="checked">
-						<label>남</label> <input type="radio" name="gender" value="M">
+						<label>여</label> <input type="radio" name="gender" value="Female" checked="checked">
+						<label>남</label> <input type="radio" name="gender" value="Male">
 					</fieldset>
 					
 					<fieldset>

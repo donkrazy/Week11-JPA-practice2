@@ -8,11 +8,6 @@
 
 	<web>
 		<link target="/">
-			<dir name="${rebel.workspace.path}/Week11to12-JPA-practice/target/m2e-wtp/web-resources">
-				<exclude name="/"/>
-			</dir>
-		</link>
-		<link target="/">
 			<dir name="${rebel.workspace.path}/Week11to12-JPA-practice/webapp">
 			</dir>
 		</link>

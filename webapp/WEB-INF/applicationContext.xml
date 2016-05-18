@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
@@ -14,16 +12,17 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/task
         http://www.springframework.org/schema/task/spring-task.xsd">
-        
+
 	<tx:annotation-driven />
 
-	<!-- 트랜잭션 관리자를 등록 -->
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
+	<!-- AOP Auto Proxy -->
+	<aop:aspectj-autoproxy />
+
+
 	<context:annotation-config />
-	<context:component-scan base-package="com.estsoft.mysite.dao, com.estsoft.mysite.service, com.estsoft.mysite.repository">
+	
+	<context:component-scan
+		base-package="com.estsoft.mysite.dao, com.estsoft.mysite.service, com.estsoft.mysite.repository">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Repository" />
 		<context:include-filter type="annotation"
@@ -31,43 +30,29 @@
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
-	
-	<!-- MyBatis SqlSessionFactoryBean -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+	<!-- 트랜잭션 관리자를 등록 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
 	</bean>
 
-	<!-- MyBatis SqlSessionTemplate -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlSessionFactory" />
-	</bean>
-	
+
 	<!-- 암호화된 Datasource -->
 	<bean id="dataSource" class="com.estsoft.utils.DecryptDataSource">
-		<property name="driverClassName">
-			<value>com.mysql.jdbc.Driver</value>
-		</property>
-		<property name="url">
-			<value>1cdmC/Vyp5GUnC4/f6+/6W5uQQRyGTPbdapI9+ZkIOtJnjU0r2LpotmYNY9vfBnVzjnTY5J6UUBRhjHHrAYJ/b9nsFzNxpDT4XU/LScK11/RkTNPGpYYxiZEVYqTOk7/902Vukwwesq5E2QJUxF73g==
-			</value>
-		</property>
-		<property name="username">
-			<value>Ow4xMFpjDuq/lkoWDTv7M5wzLimYfQpU</value>
-		</property>
-		<property name="password">
-			<value>pzrtZXWhqiGI6ZXEyE9C+bCPkWQtrC9k</value>
-		</property>
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="1cdmC/Vyp5GUnC4/f6+/6W5uQQRyGTPbdapI9+ZkIOtJnjU0r2LpotmYNY9vfBnVzjnTY5J6UUBRhjHHrAYJ/b9nsFzNxpDT4XU/LScK11/RkTNPGpYYxiZEVYqTOk7/902Vukwwesq5E2QJUxF73g==
+		"/>
+		<property name="username" value="Ow4xMFpjDuq/lkoWDTv7M5wzLimYfQpU" />
+		<property name="password" value="pzrtZXWhqiGI6ZXEyE9C+bCPkWQtrC9k" />
 	</bean>
-	
-	<!-- JPA 예외를 스프링 예외로 변환 -->
-	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-	
-	
+
+
+
 	<!-- JPA 설정 ( 엔티티 매니저 팩토리 등록 ) -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		
+
 		<property name="dataSource" ref="dataSource" />
 
 		<!-- @Entity 탐색 시작 위치 -->
@@ -86,10 +71,24 @@
 				<prop key="hibernate.format_sql">true</prop>                 							<!-- SQL 정렬해서 보기 -->
 				<prop key="hibernate.use_sql_comments">true</prop>                                 <!-- SQL 코멘트 보기 -->
 				<prop key="hibernate.id.new_generator_mappings">true</prop>                     <!-- 새 버전의 ID 생성 옵션 -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>                                   <!-- DDL 자동 생성 -->
+				<prop key="hibernate.hbm2ddl.auto">create</prop>                                   <!-- DDL 자동 생성 -->
 			</props>
 		</property>
-		
+
 	</bean>
 
+	<!-- JPA 예외를 스프링 예외로 변환 -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+		
+	<!-- MyBatis SqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
+	</bean>
+
+	<!-- MyBatis SqlSessionTemplate -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
 </beans> 

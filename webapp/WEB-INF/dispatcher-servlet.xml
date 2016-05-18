@@ -9,6 +9,10 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc">
 
 
+	<!--8 AOP Auto Proxy -->
+	<aop:aspectj-autoproxy />
+
+
 	<!--1. validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
@@ -88,9 +92,6 @@
 			</list>
 		</property>
 	</bean>
-
-	<!--8 AOP Auto Proxy -->
-	<aop:aspectj-autoproxy />
 
 	
 </beans>

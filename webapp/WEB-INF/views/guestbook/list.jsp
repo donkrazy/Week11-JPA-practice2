@@ -18,7 +18,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
-				<form action="${pageContext.request.contextPath}/guestbook/add" method="post">
+				<form action="${pageContext.request.contextPath}/guestbook/add"
+					method="post">
 					<table border=1 width=500>
 						<tr>
 							<td>이름</td>
@@ -43,7 +44,8 @@
 								<tr>
 									<td>[${count-status.index }]</td>
 									<td>${vo.name }</td>
-									<td>${vo.regDate }</td>
+									<td><fmt:formatDate type="both" dateStyle="long"
+											timeStyle="long" value="${vo.regDate }" /></td>
 									<td><a
 										href="${pageContext.request.contextPath}/guestbook/delete/${vo.no }">삭제</a></td>
 								</tr>
