@@ -2,6 +2,8 @@ package com.estsoft.mysite.controller;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,21 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.estsoft.mysite.annotation.Auth;
 import com.estsoft.mysite.annotation.AuthUser;
+import com.estsoft.mysite.domain.Board;
+import com.estsoft.mysite.domain.User;
 import com.estsoft.mysite.service.BoardService;
 import com.estsoft.mysite.vo.BoardVo;
-import com.estsoft.mysite.vo.UserVo;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
 	@Autowired
 	BoardService boardService;
-	// private static final Log LOG = LogFactory.getLog( MainController.class );
+	private static final Log LOG = LogFactory.getLog( MainController.class );
 
 	@RequestMapping("")
-	public String index(@RequestParam(value = "kwd", defaultValue = "") String kwd,
-			@RequestParam(value = "p", defaultValue = "1") String page, Model model) {
-		// LOG.error( "index called" );
+	public String index(@RequestParam(value = "kwd", defaultValue = "") String kwd, @RequestParam(value = "p", defaultValue = "2") String page, Model model) {
 		Map<String, Object> map = boardService.list(kwd, page);
 		model.addAttribute("map", map);
 		return "/board/list";
@@ -35,8 +36,8 @@ public class BoardController {
 
 	@RequestMapping("/view/{no}")
 	public String view(@PathVariable("no") Long no, Model model) {
-		BoardVo boardVo = boardService.get(no, true);
-		model.addAttribute("boardVo", boardVo);
+		Board board = boardService.get(no, true);
+		model.addAttribute("board", board);
 		return "/board/view";
 	}
 
@@ -48,29 +49,30 @@ public class BoardController {
 
 	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(@ModelAttribute BoardVo vo, @AuthUser UserVo authUser) {
+	public String write(@ModelAttribute BoardVo vo, @AuthUser User authUser) {
 		vo.setUserNo(authUser.getNo());
+		LOG.warn(vo);
 		boardService.write(vo);
 		return "redirect:/board/view/" + vo.getNo();
 	}
 
 	@RequestMapping(value = "/write/{no}", method = RequestMethod.GET)
 	public String reply(@PathVariable("no") Long no, Model model) {
-		BoardVo boardVo = boardService.get(no, true);
-		model.addAttribute("boardVo", boardVo);
+		Board board = boardService.get(no, true);
+		model.addAttribute("boardVo", board);
 		return "/board/reply";
 	}
 
 	@RequestMapping(value = "/modify/{no}", method = RequestMethod.GET)
 	public String modifyform(@PathVariable("no") Long no, Model model) {
-		BoardVo boardVo = boardService.get(no, false);
-		model.addAttribute("boardVo", boardVo);
+		Board board = boardService.get(no, false);
+		model.addAttribute("boardVo", board);
 		return "/board/modify";
 	}
 
 	@RequestMapping(value = "/modify/{no}", method = RequestMethod.POST)
 	public String modify(@PathVariable("no") Long no, Model model) {
-		BoardVo boardVo = boardService.get(no, false);
+		Board board = boardService.get(no, false);
 		// TODO: 수정 코드 아직 구현 안함
 		// model.addAttribute("boardVo", boardVo);
 		return "/board/view" + no;

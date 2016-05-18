@@ -16,20 +16,11 @@ public class BoardDao {
 	@Autowired
 	private SqlSession sqlSession;
 
-	public BoardVo get( Long boardNo ) {
-		BoardVo vo = sqlSession.selectOne("board.selectByNo", boardNo);
-		return vo;
-	}
-	
 	//TODO: delete 구현
 	public void delete( BoardVo boardVo ) {
 		sqlSession.delete("board.delete", boardVo);
 	}	
 
-	public void updateHits( Long no ) {
-		sqlSession.update("board.updateHits", no);
-	}
-	
 	public void updateGroupOrder( BoardVo boardVo ) {
 		sqlSession.update("board.updateGroupOrder", boardVo);
 	}

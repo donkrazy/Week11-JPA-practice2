@@ -4,20 +4,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.estsoft.mysite.dao.BoardDao;
+import com.estsoft.mysite.domain.Board;
+import com.estsoft.mysite.repository.BoardRepository;
 import com.estsoft.mysite.vo.BoardVo;
-import com.estsoft.mysite.vo.UserVo;
 import com.estsoft.utils.WebUtil;
 
 @Service
+@Transactional
 public class BoardService {
 	@Autowired
 	private BoardDao boardDao;
+	
+	@Autowired
+	private BoardRepository boardRepository;
 	
 	private static final int SIZE_LIST = 7;     // 리스팅되는 게시물의 수
 	private static final int SIZE_PAGE = 5; // 페이지 리스트에서 표시되는 페이지 수
@@ -64,15 +69,15 @@ public class BoardService {
 	}
 	
 	
-	public BoardVo get(long no, boolean updatehits){
+	public Board get(long no, boolean updatehits){
 		if(updatehits){
-			boardDao.updateHits(no);
-			BoardVo boardVo = boardDao.get(no);
-			return boardVo;
+			boardRepository.updateHits(no);
+			Board board = boardRepository.get(no);
+			return board;
 		}
 		else{
-			BoardVo boardVo = boardDao.get(no);
-			return boardVo;
+			Board board = boardRepository.get(no);
+			return board;
 		}
 	}
 	
