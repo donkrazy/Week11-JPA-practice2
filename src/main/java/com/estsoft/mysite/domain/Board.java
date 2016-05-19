@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -17,6 +19,7 @@ import javax.persistence.TemporalType;
 public class Board {
 	
 	@Id
+	@GeneratedValue( strategy = GenerationType.IDENTITY  )
 	private Long no;
 	
 	@Column( nullable = false, length = 200 )
@@ -40,12 +43,12 @@ public class Board {
 	private Integer depth;
 	
 	@Column( nullable = false )
-	private Integer hits;
+	private Long hits;
 
 	@ManyToOne
 	@JoinColumn( name = "user_no" )
 	private User user;
-
+	
 	public Long getNo() {
 		return no;
 	}
@@ -108,6 +111,14 @@ public class Board {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Long getHits() {
+		return hits;
+	}
+
+	public void setHits(Long hits) {
+		this.hits = hits;
 	}
 
 	@Override

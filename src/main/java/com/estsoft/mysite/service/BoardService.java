@@ -9,18 +9,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.estsoft.mysite.dao.BoardDao;
 import com.estsoft.mysite.domain.Board;
 import com.estsoft.mysite.repository.BoardRepository;
-import com.estsoft.mysite.vo.BoardVo;
 import com.estsoft.utils.WebUtil;
 
 @Service
 @Transactional
 public class BoardService {
-	@Autowired
-	private BoardDao boardDao;
-	
 	@Autowired
 	private BoardRepository boardRepository;
 	
@@ -33,7 +28,7 @@ public class BoardService {
 		if( page != null && WebUtil.isNumeric( page ) ) {
 			currentPage = Long.parseLong( page );
 		}
-		long totalCount = boardDao.getTotalCount( keyword );
+		long totalCount = boardRepository.getTotalCount( keyword );
 		long totalPage = (long)Math.ceil( (double)totalCount / SIZE_LIST );
 		if( currentPage < 1 || currentPage > totalPage ) {
 			currentPage = 1;
@@ -52,7 +47,7 @@ public class BoardService {
 			nextPage = lastPage + 1;
 		}
 		// 리스트 가져오기
-		List<BoardVo> list = boardDao.getList( keyword, SIZE_LIST*(currentPage-1), SIZE_LIST  );
+		List<Board> list = boardRepository.getList( keyword, SIZE_LIST*(currentPage-1), SIZE_LIST  );
 
 		// 포워딩
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -82,12 +77,13 @@ public class BoardService {
 	}
 	
 
-	public void write( BoardVo vo ){
+	public void write( Board vo ){
 		if( vo.getGroupNo() != null ) {
 			vo.setOrderNo( vo.getOrderNo()  + 1 );
 			vo.setDepth( vo.getDepth()  + 1 );
-			boardDao.updateGroupOrder( vo );
+			vo.setHits(0L);
+			boardRepository.updateGroupOrder( vo );
 		}
-		boardDao.insert( vo );
+		boardRepository.insert( vo );
 	}
 }

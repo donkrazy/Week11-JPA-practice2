@@ -56,12 +56,12 @@
 									</td>
 								</c:otherwise>	
 							</c:choose>
-							<td>${vo.userName }</td>
+							<td>${vo.user.name }</td>
 							<td>${vo.hits }</td>
 							<td>${vo.regDate }</td>
 							<td>
 								<c:choose>
-									<c:when test="${ not empty authUser && authUser.no == vo.userNo }">
+									<c:when test="${ not empty authUser && authUser.no == vo.user.no }">
 										<a href="${pageContext.request.contextPath}/board/delete/${vo.no }" class="del">삭제</a>
 									</c:when>
 									<c:otherwise>

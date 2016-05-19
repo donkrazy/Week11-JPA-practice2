@@ -18,7 +18,6 @@ import com.estsoft.mysite.annotation.AuthUser;
 import com.estsoft.mysite.domain.Board;
 import com.estsoft.mysite.domain.User;
 import com.estsoft.mysite.service.BoardService;
-import com.estsoft.mysite.vo.BoardVo;
 
 @Controller
 @RequestMapping("/board")
@@ -49,9 +48,8 @@ public class BoardController {
 
 	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(@ModelAttribute BoardVo vo, @AuthUser User authUser) {
-		vo.setUserNo(authUser.getNo());
-		LOG.warn(vo);
+	public String write(@ModelAttribute Board vo, @AuthUser User authUser) {
+		vo.setUser(authUser);
 		boardService.write(vo);
 		return "redirect:/board/view/" + vo.getNo();
 	}
