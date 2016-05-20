@@ -46,7 +46,7 @@ var renderHtml = function( vo ) {
 	var html = 
 		"<li id='li-" + vo.no + "'><table><tr>" +
 		"<td>" + vo.name + "</td>" +
-		"<td>" + vo.regDate +"</td>" +
+		"<td>" + new Date(vo.regDate) +"</td>" +
 		"<td><a href='#' class='a-del' data-no='"  +  vo.no + "'>삭제</a></td>" +
 		"</tr><tr>" +
 		"<td colspan='3'>" + vo.message.replace( /\r\n/g, "<br>").replace( /\n/g, "<br>") + "</td>" +

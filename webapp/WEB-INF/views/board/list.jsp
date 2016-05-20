@@ -14,9 +14,7 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form"
-						 action="${pageContext.request.contextPath}/board"
-						 method="get">
+				<form id="search_form" action="${pageContext.request.contextPath}/board" method="get">
 					<c:choose>
 						<c:when test='${map.keyword == "" }'>
 							<input type="text" id="kwd" name="kwd" value="">
@@ -61,7 +59,7 @@
 							<td>${vo.regDate }</td>
 							<td>
 								<c:choose>
-									<c:when test="${ not empty authUser && authUser.no == vo.user.no }">
+									<c:when test="${ authUser.no == vo.user.no }">
 										<a href="${pageContext.request.contextPath}/board/delete/${vo.no }" class="del">삭제</a>
 									</c:when>
 									<c:otherwise>

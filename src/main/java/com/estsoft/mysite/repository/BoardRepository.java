@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.estsoft.mysite.domain.Board;
 import com.estsoft.mysite.domain.Guestbook;
 import com.mysema.query.SearchResults;
+import com.mysema.query.jpa.impl.JPADeleteClause;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.jpa.impl.JPAUpdateClause;
 
@@ -68,25 +69,25 @@ public class BoardRepository {
 	public List<Board> getList(String keyword, long page, int sizeList) {
 		JPAQuery query = new JPAQuery( em );
 		SearchResults<Board> results = null;
-		Long limit = page>sizeList?page:sizeList;
 		if(keyword==null || keyword.equals("")){
-			//TODO: limit?
-			results = query.from( board ).join(board.user, user).orderBy(board.groupNo.desc(), board.orderNo.asc() ).limit(limit).listResults( board );
+			results = query.from( board ).join(board.user, user).orderBy(board.groupNo.desc(), board.orderNo.asc() ).limit(sizeList).offset(page).listResults( board );
 		}
 		else{
-			results = query.from( board ).join(board.user, user).where(board.title.like("%"+keyword+"%").or(board.content.like("%"+keyword+"%"))).orderBy(board.groupNo.desc(), board.orderNo.asc() ).limit(limit).listResults( board );
+			results = query.from( board ).join(board.user, user).where(board.title.like("%"+keyword+"%").or(board.content.like("%"+keyword+"%"))).orderBy(board.groupNo.desc(), board.orderNo.asc() ).limit(sizeList).offset(page).listResults( board );
 		}
 		return results.getResults();
 	}
-	
-	
-	//TODO: DELETE 구현
-	/*
-	 * 	<delete id="delete" parameterType="boardvo">
-			DELETE FROM board WHERE no = #{no} AND user_no = #{userNo}
-			아직구현안함
-		</delete>
-	 * 
-	 */
 
+	public void update(Board guBoard) {
+		JPAUpdateClause updateClause = new JPAUpdateClause( em, board );
+		updateClause.where( board.no.eq( guBoard.getNo() ) ).set(board.title, guBoard.getTitle()).set(board.content, guBoard.getContent()).execute();
+	}
+
+	public void delete(Board vo) {
+		Board result = new JPAQuery( em ).from( board ).where( board.no.eq( vo.getNo() ) ).singleResult( board );
+		if(result==null){
+			return;
+		}
+		em.remove(result);
+	}
 }

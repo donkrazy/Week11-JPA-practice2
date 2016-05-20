@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.estsoft.mysite.domain.Board;
+import com.estsoft.mysite.domain.User;
 import com.estsoft.mysite.repository.BoardRepository;
 import com.estsoft.utils.WebUtil;
 
@@ -85,5 +86,20 @@ public class BoardService {
 			boardRepository.updateGroupOrder( vo );
 		}
 		boardRepository.insert( vo );
+	}
+
+
+	public void update(Board board, Board guBoard) {
+		guBoard.setTitle(board.getTitle());
+		guBoard.setContent(board.getContent());
+		boardRepository.update(guBoard);
+	}
+
+
+	public void delete(Long no, User authUser) {
+		Board board = boardRepository.get(no);
+		if(authUser.getNo()==board.getUser().getNo()){
+			boardRepository.delete(board);
+		}
 	}
 }

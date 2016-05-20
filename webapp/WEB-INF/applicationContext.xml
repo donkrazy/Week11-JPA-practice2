@@ -48,13 +48,11 @@
 	</bean>
 
 
-
 	<!-- JPA 설정 ( 엔티티 매니저 팩토리 등록 ) -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-
 		<property name="dataSource" ref="dataSource" />
-
+		
 		<!-- @Entity 탐색 시작 위치 -->
 		<property name="packagesToScan" value="com.estsoft.mysite.domain" />
 
@@ -74,21 +72,9 @@
 				<prop key="hibernate.hbm2ddl.auto">update</prop>                                   <!-- DDL 자동 생성 -->
 			</props>
 		</property>
-
 	</bean>
 
 	<!-- JPA 예외를 스프링 예외로 변환 -->
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 		
-	<!-- MyBatis SqlSessionFactoryBean -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
-	</bean>
-
-	<!-- MyBatis SqlSessionTemplate -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlSessionFactory" />
-	</bean>
 </beans> 
